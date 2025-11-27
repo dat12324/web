@@ -1,0 +1,109 @@
+extends ../../layout/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert(3000)
+    +alert-error(3000)
+    
+    .d-flex.justify-content-between.align-items-center.mb-4
+        h1.mb-0 Chi tiết sản phẩm
+        a(href=`${preFixAdmin}/products` class="btn btn-secondary") 
+            i.bi.bi-arrow-left 
+            | Quay lại
+    
+    .row
+        .col-md-8
+            .card.mb-4
+                .card-header.bg-light
+                    h5.mb-0 Thông tin sản phẩm
+                .card-body
+                    .row.mb-3
+                        .col-sm-4
+                            strong Tiêu đề:
+                        .col-sm-8
+                            p.mb-0= product.title
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong Mô tả:
+                        .col-sm-8
+                            div.mb-0.tinymce-content!= product.description
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong Giá sản phẩm:
+                        .col-sm-8
+                            p.mb-0
+                                span.badge.bg-success= product.price + '$'
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong % Giảm giá:
+                        .col-sm-8
+                            p.mb-0= product.discountPercentage + '%'
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong Số lượng:
+                        .col-sm-8
+                            p.mb-0= product.stock
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong Vị trí:
+                        .col-sm-8
+                            p.mb-0= product.position
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong Trạng thái:
+                        .col-sm-8
+                            p.mb-0
+                                if product.status === 'active'
+                                    span.badge.bg-success Hoạt động
+                                else
+                                    span.badge.bg-secondary Dừng hoạt động
+                    
+                    .row.mb-3
+                        .col-sm-4
+                            strong Hình ảnh:
+                        .col-sm-8
+                            if product.thumbnail
+                                img(
+                                    src=product.thumbnail
+                                    alt=product.title
+                                    class="img-thumbnail"
+                                    style="max-width: 200px; height: auto;"
+                                )
+                            else
+                                div.bg-light.p-3.text-center.border
+                                    small.text-muted Không có hình ảnh
+            
+            .d-flex.gap-2
+                a(href=`${preFixAdmin}/products/edit/${product.id}` class="btn btn-warning flex-grow-1") 
+                    i.bi.bi-pencil 
+                    | Chỉnh sửa
+                a(href=`${preFixAdmin}/products` class="btn btn-secondary flex-grow-1") 
+                    i.bi.bi-list 
+                    | Danh sách
+        
+        .col-md-4
+            .card.bg-light
+                .card-header.bg-white
+                    h5.mb-0 Thông tin khác
+                .card-body.small
+                    .mb-2
+                        strong ID:
+                        br
+                        code= product._id
+                    .mb-2
+                        strong Ngày tạo:
+                        br
+                        span= product.createdAt ? new Date(product.createdAt).toLocaleString('vi-VN') : 'N/A'
+                    if product.updatedAt
+                        .mb-2
+                            strong Cập nhật lần cuối:
+                            br
+                            span= new Date(product.updatedAt).toLocaleString('vi-VN')
+    
+    script(src="/admin/js/product.js")

@@ -1,0 +1,25 @@
+doctype html
+html    
+  head 
+    title #{pageTitle}
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css")
+    // admin stylesheet
+    link(rel="stylesheet" href="/admin/css/style.css")
+
+  body
+    include ../partials/header.pug
+
+    .admin-wrapper
+      include ../partials/sider.pug
+      .admin-content
+        block main
+
+    // JS phải để cuối body
+    script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js")
+    script(src="/admin/js/script.js")
+
+    // TinyMCE
+    <script src="https://cdn.tiny.cloud/1/ovkjy7raty4r3ybgb7acvy4un9w9rmdd8uxptscx8pwr5wky/tinymce/6/tinymce.min.js"></script>
+
+    script(src="/admin/js/tinymce-config.js")

@@ -1,0 +1,160 @@
+extends ../../layout/default.pug
+include ../../mixins/alert.pug
+block main
+   +alert-error(3000)
+   h1 Them san pham moi
+   form(
+     action=`${preFixAdmin}/products/create`
+     id="form-create-product"
+     method="POST"
+     enctype="multipart/form-data"
+   )
+
+    div(
+        class="from-group"
+        )
+        label(
+            for="title"
+            class="form-label"
+        ) Tieu de san pham
+        input(
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+        
+        )
+    div(
+        class="from-group"
+        )
+        label(
+            for="desc"
+            class="form-label"
+        ) Mo ta san pham
+        textarea(
+            class="form-control"
+            id="desc"
+            name="description"
+            rows="5"
+        )
+    div(
+        class="from-group"
+        )
+        label(
+            for="price"
+            class="form-label"
+        ) Gia san pham
+        input(
+            type="number"
+            class="form-control"
+            id="price"
+            name="price"
+            value="0"
+        )
+    div(
+        class="from-group"
+        )
+        label(
+            for="discount"
+            class="form-label"
+        ) %Giam gia
+        input(
+            type="number"
+            class="form-control"
+            id="discount"
+            name="discountPercentage"
+            value="0"
+            min="0"
+        )
+    div(
+        class="from-group"
+        )
+        label(
+            for="stock"
+            class="form-label"
+        ) So luong san pham
+        input(
+            type="number"
+            class="form-control"
+            id="stock"
+            name="stock"
+            value="0"
+            min="0"
+        )
+    div(
+        class="from-group"
+        upload-image
+        )
+        label(  
+            for="thumbnail"
+            class="form-label"
+        ) Hinh anh
+        input(
+            type="file"
+            class="form-control-file"
+            id="thumbnail"
+            name="thumbnail"
+            accept="image/*"
+            upload-image-input
+        )
+        img(
+            src=""
+            upload-image-preview
+            width="50px"
+        )
+    div(
+        class="from-group"
+        )
+        label(
+            for="position"
+            class="form-label"
+        ) Vi tri san pham
+        input(
+            type="number"
+            class="form-control"
+            id="position"
+            name="position"
+        )
+    div(
+        class="from-group form-check form-check-inline"
+        )
+        
+        input(
+            type="radio"
+            class="form-check-input"
+            id="statusActive"
+            name="status"
+            value="active"
+            checked
+        )
+        label(
+            for="statusActive"
+            class="form-check-label"
+        ) Hoat dong
+    div(
+        class="from-group form-check form-check-inline"
+        )
+        
+        input(
+            type="radio"
+            class="form-check-input"
+            id="statusInactive"
+            name="status"
+            value="inactive"
+        )
+        label(
+            for="statusInactive"
+            class="form-check-label"
+        ) Dung hoat dong
+    div(
+        class="from-group mt-3"
+        )
+        button(
+            type="submit"
+            class="btn btn-primary"
+        ) Tao san pham
+
+        
+
+
+   script(src="/admin/js/product.js") 

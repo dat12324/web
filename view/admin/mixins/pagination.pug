@@ -1,0 +1,16 @@
+mixin pagination(Pages)
+        nav
+            ul(class="pagination")
+                if(Pages.currentPage > 1)
+                    li(class="page-item")
+                        button(class="page-link" 
+                        button-pagination=Pages.currentPage-1) Trước
+                - for (let i = 1; i <= Pages.totalPages; i++)
+                    li(class=`page-item ${i === Pages.currentPage ? 'active' : ''}`)
+                        button(class="page-link"
+                        button-pagination=i
+                            ) #{i}
+                if(Pages.currentPage < Pages.totalPages)
+                    li(class="page-item")
+                        button(class="page-link"
+                        button-pagination=Pages.currentPage+1) Trang Sau

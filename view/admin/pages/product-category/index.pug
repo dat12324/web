@@ -1,0 +1,111 @@
+extends ../../layout/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
+include ../../mixins/sort.pug
+block main
+    +alert(3000)
+
+
+    h1.mb-4 Danh muc san pham
+    .card.mb-3 Danh muc san pham
+        .card-header Bộ lọc và Tìm kiếm
+        .card-body
+            .row
+                .col-6
+                    +filter-status(filterStatus)
+                .col-6
+                    +search(keyword)
+
+                .col-6 
+                    a(href=`${preFixAdmin}/product-category/create` 
+                    class="btn btn-primary float-end") Thêm danh muc
+
+    //- bulk-change form: send to /change-multi (matches route.patch('/change-multi', ...))
+
+    .card.mb-3
+        .card-header Sắp xếp
+        .card-body
+            .row
+            .col-4
+                //- +sort()
+
+    .table-responsive
+        +change-multi(`${preFixAdmin}/product-category/change-multi?_method=PATCH`)
+
+        table(
+            class="table table-bordered table-hover align-middle"
+            checkbox-multi
+        )
+            thead
+                tr
+                    th.text-center
+                        input(type="checkbox" name="checkall" )
+                    th.text-center STT
+                    th.text-center Hình ảnh
+                    th Tiêu đề
+                    th.text-center Vi tri
+                    th.text-center Trạng thái
+                    th.text-center Hành động
+            tbody
+                each product, index in productCategory
+                    tr
+                        //- row checkbox (name="id" to match requested attribute)
+                        td.text-center
+                            input.row-checkbox(type="checkbox" name="id" value=product._id)
+                        td.text-center= index + 1
+                        td.text-center
+                            if product.thumbnail
+                                img(src=product.thumbnail, width="80")
+                            else
+                                img(src="/images/no-image.jpg" alt="No image" width="80")
+                        td= product.title
+        
+                        td.text-center 
+                            input(type="number" 
+                                name="position"
+                                stype="width: 60px;"
+                                value=product.position
+                                min="1"
+                                )
+                        td.text-center
+                            if product.status === "active"
+                                a(href="javascript:;"
+                                    button-change-status
+                                    data-status=product.status
+                                    data-id=product.id
+                                    class="badge badge-success") Hoạt động
+                            else
+                                a(href="javascript:;"
+                                    button-change-status
+                                    data-status=product.status
+                                    data-id=product.id
+                                    class="badge badge-danger") Dung Hoạt động
+                        td.text-center
+                            a(  href=`${preFixAdmin}/product-category/edit/${product.id}`
+                                class="btn btn-warning btn-sm") Sửa
+                            a(  href=`${preFixAdmin}/product-category/detail/${product.id}`
+                                class="btn btn-secondary btn-sm") Chi tiet
+                            button(
+                                class="btn btn-danger btn-sm ml-1"
+                                data-id=product.id
+                                button-delete
+                            ) Xóa
+    +pagination(Pages)
+
+    form(action="" 
+        method="POST"
+        id="form-change-status"
+        data-path=`${preFixAdmin}/product-category/change-status`
+        )
+
+    form(action="" 
+        method="POST"
+        id="form-delete"
+        data-path=`${preFixAdmin}/product-category/delete`
+        )
+
+    script(src="/admin/js/product.js") 
+

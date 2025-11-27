@@ -1,0 +1,234 @@
+/* Admin panel styles - basic layout, header, sidebar, content, and responsive rules */
+:root{
+	--admin-bg: #f5f7fa;
+	--admin-sidebar-bg: #2f4050;
+	--admin-sidebar-text: #cfd8dc;
+	--admin-primary: #1ab394;
+	--admin-muted: #98a6ad;
+	--admin-header-bg: #ffffff;
+}
+
+/* Reset for admin area (scoped by admin assets path) */
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	background: var(--admin-bg);
+	color: #333;
+	margin: 0;
+}
+
+/* Header */
+header.header{
+	background: #111; /* dark header */
+	color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 60px;
+	z-index: 1000;
+}
+.inner-logo a{
+	color: #fff;
+	font-weight: 800;
+	letter-spacing: 1px;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+}
+
+/* ensure body content is not hidden under fixed header */
+body{padding-top:60px}
+
+/* Top area layout helpers */
+.container-fluid{max-width: 1200px; margin: 0 auto;}
+.row{display:flex; flex-wrap:wrap; align-items:center}
+.col-3{flex: 0 0 25%; max-width: 25%;}
+.col-9{flex: 0 0 75%; max-width: 75%;}
+
+/* Admin main layout (assumes markup will wrap header + main .admin-wrapper) */
+.admin-wrapper{display:flex; min-height: calc(100vh - 60px);} /* header height approx */
+
+/* Sidebar */
+.admin-sidebar{
+	width: 240px;
+	position: fixed;
+	top: 60px; /* below header */
+	bottom: 0;
+	left: 0;
+	background: var(--admin-sidebar-bg);
+	color: var(--admin-sidebar-text);
+	padding: 18px 12px;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+.admin-sidebar .sidebar-brand a{color:#fff; font-weight:800; text-decoration:none; display:block; margin-bottom:16px}
+.admin-sidebar nav ul.nav{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
+.admin-sidebar nav ul.nav li{margin:0}
+.admin-sidebar nav ul.nav a{color:var(--admin-sidebar-text); display:flex; align-items:center; padding:10px 12px; border-radius:4px; text-decoration:none}
+.admin-sidebar nav ul.nav a:hover, .admin-sidebar nav ul.nav a.active{background:rgba(255,255,255,0.06); color:#fff}
+
+/* Content area */
+.admin-content{
+	margin-left: 240px; /* leave space for fixed sidebar */
+	padding: 40px 48px;
+	box-sizing: border-box;
+	min-height: calc(100vh - 60px);
+	background: #fff;
+}
+
+.admin-content h1{
+	font-size: 48px;
+	margin: 8px 0 24px 0;
+	color: #222;
+}
+
+.admin-card{
+	background: #fff;
+	border-radius:6px;
+	box-shadow: 0 1px 3px rgba(16,24,40,0.06);
+	padding:16px;
+	margin-bottom:18px;
+}
+
+/* Utility classes */
+.text-muted{color:var(--admin-muted)}
+.d-flex{display:flex}
+.justify-between{justify-content:space-between}
+
+/* Menu inside header (right side) */
+.inner-menu{display:flex; justify-content:flex-end; align-items:center}
+.menu-list{list-style:none; margin:0; padding:0; display:flex; gap:12px}
+.menu-list a{color:#333; text-decoration:none}
+
+/* Small screens: collapse sidebar under content */
+@media (max-width: 992px){
+	.admin-sidebar{position:relative; top:0; width:100%; height:auto}
+	.admin-content{margin-left:0; padding:20px}
+	.col-3, .col-9{flex-basis:100%; max-width:100%}
+}
+
+/* Small polish for tables */
+.table{width:100%; border-collapse:collapse}
+.table th, .table td{padding:8px 10px; border-bottom:1px solid #eef2f5}
+
+/* Buttons */
+.btn{display:inline-block;padding:8px 12px;border-radius:4px;border:0;cursor:pointer}
+.btn-primary{background:var(--admin-primary); color:#fff}
+.btn-outline{background:transparent;border:1px solid #d6dee3;color:#334}
+
+/* Form controls */
+.form-control{display:block;width:100%;padding:8px 10px;border:1px solid #dfe7ea;border-radius:4px}
+
+/* Small helpers */
+.mb-2{margin-bottom:8px}
+.mb-3{margin-bottom:16px}
+
+/* TinyMCE content styling for detail view */
+.tinymce-content {
+	font-size: 16px;
+	line-height: 1.6;
+	color: #333;
+}
+
+.tinymce-content h1,
+.tinymce-content h2,
+.tinymce-content h3,
+.tinymce-content h4,
+.tinymce-content h5,
+.tinymce-content h6 {
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	font-weight: 600;
+	color: #222;
+}
+
+.tinymce-content h1 { font-size: 2em; }
+.tinymce-content h2 { font-size: 1.75em; }
+.tinymce-content h3 { font-size: 1.5em; }
+.tinymce-content h4 { font-size: 1.25em; }
+.tinymce-content h5 { font-size: 1.1em; }
+.tinymce-content h6 { font-size: 1em; }
+
+.tinymce-content p {
+	margin-bottom: 1em;
+}
+
+.tinymce-content ul,
+.tinymce-content ol {
+	margin-bottom: 1em;
+	padding-left: 2em;
+}
+
+.tinymce-content li {
+	margin-bottom: 0.5em;
+}
+
+.tinymce-content a {
+	color: #1ab394;
+	text-decoration: none;
+	border-bottom: 1px solid #1ab394;
+}
+
+.tinymce-content a:hover {
+	color: #0d8d6c;
+	border-bottom-color: #0d8d6c;
+}
+
+.tinymce-content blockquote {
+	border-left: 4px solid #1ab394;
+	padding-left: 1em;
+	margin: 1em 0;
+	color: #666;
+	font-style: italic;
+}
+
+.tinymce-content img {
+	max-width: 100%;
+	height: auto;
+	margin: 1em 0;
+	border-radius: 4px;
+}
+
+.tinymce-content code {
+	background: #f5f5f5;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-family: 'Courier New', monospace;
+	color: #d63384;
+}
+
+.tinymce-content pre {
+	background: #f5f5f5;
+	padding: 1em;
+	border-radius: 4px;
+	overflow-x: auto;
+	margin-bottom: 1em;
+}
+
+.tinymce-content pre code {
+	background: none;
+	padding: 0;
+	color: #333;
+}
+
+.tinymce-content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1em;
+}
+
+.tinymce-content table th,
+.tinymce-content table td {
+	border: 1px solid #ddd;
+	padding: 0.75em;
+	text-align: left;
+}
+
+.tinymce-content table th {
+	background: #f9f9f9;
+	font-weight: 600;
+}
+
+/* Ensure admin assets have priority */
+/* End of admin styles */
+
