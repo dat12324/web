@@ -33,7 +33,10 @@ block main
                         .col-sm-4
                             strong Danh mục cha:
                         .col-sm-8
-                            div.mb-0= product.parent_id
+                            if parentName
+                                div.mb-0= parentName
+                            else
+                                div.mb-0.text-muted -
                     
     
                     

@@ -31,13 +31,16 @@ block main
                 for="parent_id"
                 class="form-label"
             ) Danh muc cha 
-            input(
-                type="text"
+            
+            select(
                 class="form-control"
                 id="parent_id"
                 name="parent_id"
-
             )
+                option(value="") -- Chon danh muc cha --
+                if(productCategory)
+                    each category in productCategory
+                        option(value=category.id) #{category.title}
 
         div(
             class="from-group"

@@ -34,13 +34,21 @@ block main
                 for="title"
                 class="form-label"
             ) Danh muc cha
-            input(
-                type="text"
+            
+            select(
                 class="form-control"
                 id="parent_id"
                 name="parent_id"
-                value = product.parent_id
             )
+                
+                option(value="" ) -- Chọn danh mục cha --
+                if(productCategory)
+                    each category in productCategory
+                        //- skip rendering the category itself as its own parent
+                        - const isSelf = product && String(product._id) === String(category._id)
+                        if !isSelf
+                            - const isSelected = String(product.parent_id) === String(category._id)
+                            option(value=category._id selected=isSelected)= category.title
         div(
             class="from-group"
             )
@@ -102,7 +110,7 @@ block main
                 class="form-check-input"
                 id="statusActive"
                 name="status"
-                value=product.status
+                value="active"
                 checked=(product.status === 'active'? true : false)
             )
             label(

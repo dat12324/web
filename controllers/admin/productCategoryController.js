@@ -9,6 +9,7 @@ module.exports.index = async (req, res) => {
   let find = {
     deleted: false,
   };
+
   if (req.query.status) {
     find.status = req.query.status;
   }
@@ -43,9 +44,12 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
+  // load existing categories so user can pick a parent category
+  const productCategories = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
   res.render("admin/pages/product-category/create", {
     pageTitle: "Tạo danh mục sản phẩm",
     messages: req.flash(),
+    productCategory: productCategories,
   });
 };
 
@@ -125,10 +129,13 @@ module.exports.editProduct = async (req, res) => {
   const id = req.params.id;
   const find = { _id: id, deleted: false };
 
+  const productCategories = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
+
   const product = await ProductCategory.findOne(find);
   res.render("admin/pages/product-category/edit", {
     pageTitle: "Edit Product",
     product: product,
+    productCategory: productCategories,
   });
 };
 
