@@ -1,5 +1,6 @@
 extends ../../layout/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 block main
     +alert-error(3000)
     h1 Them moi danh muc san pham
@@ -39,8 +40,7 @@ block main
             )
                 option(value="") -- Chon danh muc cha --
                 if(productCategory)
-                    each category in productCategory
-                        option(value=category.id) #{category.title}
+                    +select-tree(records)
 
         div(
             class="from-group"

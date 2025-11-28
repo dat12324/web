@@ -2,6 +2,7 @@ const ProductCategory = require("../../modules/product-category.model");
 const filterStatusHelper = require("../../helpers/filterStatus.js");
 const ObjectSearch = require("../../helpers/search.js");
 const pagination = require("../../helpers/pagnition.js");
+const createTreeHelper = require("../../helpers/createTree.js");
 
 module.exports.index = async (req, res) => {
   const filterStatus = filterStatusHelper(req.query);
@@ -29,10 +30,12 @@ module.exports.index = async (req, res) => {
     countProduct
   );
 
+
   const productCategories = await ProductCategory.find(find)
     .sort({ position: "desc" })
     .limit(Pages.limits)
     .skip(Pages.skip);
+  const records = createTreeHelper.tree(productCategories);
   res.render("admin/pages/product-category/index", {
     pageTitle: "Danh mục sản phẩm",
     messages: req.flash(),
@@ -40,16 +43,23 @@ module.exports.index = async (req, res) => {
     filterStatus: filterStatus,
     keyword: Search.keyword,
     Pages: Pages,
+    records: records,
   });
 };
 
 module.exports.create = async (req, res) => {
+
   // load existing categories so user can pick a parent category
-  const productCategories = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
+  const productCategories = await ProductCategory.find({ deleted: false }).sort(
+    { position: "desc" }
+  );
+  const records = createTreeHelper.tree(productCategories);
+  console.log(records);
   res.render("admin/pages/product-category/create", {
     pageTitle: "Tạo danh mục sản phẩm",
     messages: req.flash(),
     productCategory: productCategories,
+    records: records,
   });
 };
 
@@ -129,7 +139,9 @@ module.exports.editProduct = async (req, res) => {
   const id = req.params.id;
   const find = { _id: id, deleted: false };
 
-  const productCategories = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
+  const productCategories = await ProductCategory.find({ deleted: false }).sort(
+    { position: "desc" }
+  );
 
   const product = await ProductCategory.findOne(find);
   res.render("admin/pages/product-category/edit", {
