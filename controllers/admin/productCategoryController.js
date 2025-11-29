@@ -143,11 +143,14 @@ module.exports.editProduct = async (req, res) => {
     { position: "desc" }
   );
 
+  const records = createTreeHelper.tree(productCategories)
+
   const product = await ProductCategory.findOne(find);
   res.render("admin/pages/product-category/edit", {
     pageTitle: "Edit Product",
     product: product,
     productCategory: productCategories,
+    records: records
   });
 };
 

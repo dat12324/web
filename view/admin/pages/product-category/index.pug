@@ -5,7 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
-include ../../mixins/table-tree.pug
+
 block main
     +alert(3000)
 
@@ -51,7 +51,49 @@ block main
                     th.text-center Trạng thái
                     th.text-center Hành động
             tbody
-                +table-tree(records)
+                each product, index in productCategory
+                    tr
+                        //- row checkbox (name="id" to match requested attribute)
+                        td.text-center
+                            input.row-checkbox(type="checkbox" name="id" value=product._id)
+                        td.text-center= index + 1
+                        td.text-center
+                            if product.thumbnail
+                                img(src=product.thumbnail, width="80")
+                            else
+                                img(src="/images/no-image.jpg" alt="No image" width="80")
+                        td= product.title
+        
+                        td.text-center 
+                            input(type="number" 
+                                name="position"
+                                stype="width: 60px;"
+                                value=product.position
+                                min="1"
+                                )
+                        td.text-center
+                            if product.status === "active"
+                                a(href="javascript:;"
+                                    button-change-status
+                                    data-status=product.status
+                                    data-id=product.id
+                                    class="badge badge-success") Hoạt động
+                            else
+                                a(href="javascript:;"
+                                    button-change-status
+                                    data-status=product.status
+                                    data-id=product.id
+                                    class="badge badge-danger") Dung Hoạt động
+                        td.text-center
+                            a(  href=`${preFixAdmin}/product-category/edit/${product.id}`
+                                class="btn btn-warning btn-sm") Sửa
+                            a(  href=`${preFixAdmin}/product-category/detail/${product.id}`
+                                class="btn btn-secondary btn-sm") Chi tiet
+                            button(
+                                class="btn btn-danger btn-sm ml-1"
+                                data-id=product.id
+                                button-delete
+                            ) Xóa
     +pagination(Pages)
 
     form(action="" 

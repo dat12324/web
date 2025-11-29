@@ -43,13 +43,7 @@ block main
             )
                 
                 option(value="" ) -- Chọn danh mục cha --
-                if(productCategory)
-                    each category in productCategory
-                        //- skip rendering the category itself as its own parent
-                        - const isSelf = product && String(product._id) === String(category._id)
-                        if !isSelf
-                            - const isSelected = String(product.parent_id) === String(category._id)
-                            option(value=category._id selected=isSelected)= category.title
+                +select-tree(records,1,product.parent_id)
         div(
             class="from-group"
             )

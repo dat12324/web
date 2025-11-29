@@ -14,6 +14,6 @@ const createTree = (arr, parentID = "") => {
 };
 
 module.exports.tree = (arr, parentID = "") => {
-    const tree = createTree(arr, parentID);
-    return tree;
-}
+  const tree = createTree(arr, parentID);
+  return tree;
+};

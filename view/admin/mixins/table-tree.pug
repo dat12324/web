@@ -1,6 +1,7 @@
 mixin table-tree(items, level = 1)
     each product, index in items
         - const prefix = Array(level).join("-- ")
+
         tr
             //- row checkbox (name="id" to match requested attribute)
             td.text-center
