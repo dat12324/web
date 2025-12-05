@@ -1,0 +1,31 @@
+extends ../../layout/login.pug
+include ../../mixins/alert.pug
+
+block content
+	.login-wrapper
+		.login-card
+			.brand
+				img.logo(src='/admin/images/logo.svg' alt='logo')
+				.brand-title
+					h4.mb-0.text-dark Quản trị hệ thống
+					p.small-muted.mb-0 Hệ thống quản lý nội dung
+
+			+alert-error(3000)
+
+			form(method="POST" action=`${preFixAdmin}/auth/login`)
+				.form-row
+					label.form-label(for="email") Email
+					input.form-control(type="email" id="email" name="email" placeholder="email@domain.com" required autofocus)
+				.form-row
+					label.form-label(for="password") Mật khẩu
+					input.form-control(type="password" id="password" name="password" placeholder="Mật khẩu" required)
+				.form-row.actions
+					.form-check
+						input.form-check-input(type="checkbox" id="remember" name="remember")
+						label.form-check-label(for="remember") Ghi nhớ
+					a.small-muted(href=`${preFixAdmin}/forgot`) Quên mật khẩu?
+				.form-row
+					button.btn.btn-primary(type="submit") Đăng nhập
+				.footer-note
+					small.small-muted Bản quyền © #{new Date().getFullYear()} - Công ty của bạn
+

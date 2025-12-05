@@ -1,8 +1,10 @@
 const e = require("express");
 const Product = require("../../modules/product.model");
+const ProductCategory = require("../../modules/product-category.model");
 const filterStatusHelper = require("../../helpers/filterStatus.js");
 const ObjectSearch = require("../../helpers/search.js");
 const pagination = require("../../helpers/pagnition.js");
+const createTreeHelper = require("../../helpers/createTree.js");
 module.exports.index = async (req, res) => {
   // Logic to fetch products from the database
   const filterStatus = filterStatusHelper(req.query);
@@ -102,8 +104,12 @@ module.exports.delete = async (req, res) => {
 };
 
 module.exports.createProduct = async (req, res) => {
+  const records = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
+  const newRecords = createTreeHelper.tree(records);
+  
   res.render("admin/pages/product/create", {
     pageTitle: "Create Product",
+    Category : newRecords,
   });
 };
 
@@ -128,11 +134,15 @@ module.exports.createPost = async (req, res) => {
 module.exports.editProduct = async (req, res) => {
   const id = req.params.id;
   const find = { _id: id, deleted: false };
+  const records = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
 
   const product = await Product.findOne(find);
+  const newRecords = createTreeHelper.tree(records);
+
   res.render("admin/pages/product/edit", {
     pageTitle: "Edit Product",
     product: product,
+    Category : newRecords,
   });
 };
 module.exports.editPatch = async (req, res) => {

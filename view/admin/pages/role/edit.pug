@@ -1,0 +1,20 @@
+extends ../../layout/default.pug
+
+block main
+    .d-flex.justify-content-between.align-items-center.mb-4
+        h1.mb-0 Sửa vai trò
+        a(href=`${preFixAdmin}/roles` class="btn btn-secondary") Quay lại
+
+    .card
+        .card-body
+            form(action=`${preFixAdmin}/roles/edit/${role._id}?_method=PATCH` method="POST")
+                .mb-3
+                    label.form-label(for="title") Tên vai trò
+                    input.form-control(type="text" id="title" name="title" required value=role.title)
+                .mb-3
+                    label.form-label(for="permissions") Quyền (ngăn cách bằng dấu ,)
+                    input.form-control(type="text" id="permissions" name="permissions" placeholder="ví dụ: xem sản phẩm, sửa sản phẩm" value=(role.permissions ? role.permissions.join(', ') : ''))
+                .mb-3
+                    label.form-label(for="description") Mô tả
+                    textarea.form-control(id="description" name="description" rows="4")= role.description
+                button.btn.btn-primary(type="submit") Cập nhật

@@ -1,0 +1,18 @@
+extends ../../layout/default.pug
+
+block main
+	.d-flex.justify-content-between.align-items-center.mb-4
+		h1.mb-0 Tạo vai trò mới
+		a(href=`${preFixAdmin}/roles` class="btn btn-secondary") Quay lại
+
+	.card
+		.card-body
+			form(action=`${preFixAdmin}/roles/create` method="POST")
+				.mb-3
+					label.form-label(for="title") Tên vai trò
+					input.form-control(type="text" id="title" name="title" required)
+				.mb-3
+					label.form-label(for="desc") Mô tả
+					textarea.form-control(id="desc" name="description" rows="4")
+				button.btn.btn-primary(type="submit") Tạo
+

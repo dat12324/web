@@ -139,7 +139,6 @@ if(uploadImage.length>0){
 }
 
 const sort = document.querySelector('[sort]');
-console.log(sort);
 if(sort){
     const sortSelect = sort.querySelector('[sort-select]');
     const clearButton = sort.querySelector('[sort-clear]');

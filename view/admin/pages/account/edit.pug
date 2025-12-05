@@ -1,141 +1,108 @@
 extends ../../layout/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
-
 block main
-    +alert(3000)
     +alert-error(3000)
-    h1 Sua san pham
+    h1 Sua tai khoan
     form(
-        action=`${preFixAdmin}/products/edit/${product.id}?_method=PATCH`
+        action=`${preFixAdmin}/accounts/edit/${data.id}?_method=PATCH`
         method="POST"
         enctype="multipart/form-data"
     )
-
         div(
             class="from-group"
             )
             label(
-                for="title"
+                for="fullName"
                 class="form-label"
-            ) Tieu de san pham
+            ) Ho ten
             input(
                 type="text"
                 class="form-control"
-                id="title"
-                name="title"
-                value = product.title
+                id="fullName"
+                name="fullName"
+                value = data.fullName
+            )
+        div(
+            class="from-group"
+            )
+            label(
+                for="email"
+                class="form-label"
+            ) email
+            input(
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                value = data.email
+            )
+        div(
+            class="from-group"
+            )
+            label(
+                for="password"
+                class="form-label"
+            ) password
+            input(
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+            )
+        div(
+            class="from-group"
+            )
+            label(
+                for="phone"
+                class="form-label"
+            ) phone
+            input(
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value = data.phone
+            )
 
-            )
-        div(
-            class="from-group"
-            )
-            label(
-                for="desc"
-                class="form-label"
-            ) Mo ta san pham
-            textarea(
-                class="form-control"
-                id="desc"
-                name="description"
-                rows="5"
-                value = product.description
-            ) #{product.description}
-        div(
-            class="from-group"
-            )
-            label(
-                for="product_category_id"
-                class="form-label"
-            ) Danh muc cha 
-            
-            select(
-                class="form-control"
-                id="product_category_id"
-                name="product_category_id"
-            )
-                option(value="") -- Chon danh muc cha --
-                if(Category)
-                    +select-tree(Category,1,product.product_category_id)
-        div(
-            class="from-group"
-            )
-            label(
-                for="price"
-                class="form-label"
-            ) Gia san pham
-            input(
-                type="number"
-                class="form-control"
-                id="price"
-                name="price"
-                value= product.price
-            )
-        div(
-            class="from-group"
-            )
-            label(
-                for="discount"
-                class="form-label"
-            ) %Giam gia
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                value= product.discountPercentage
-                min="0"
-            )
-        div(
-            class="from-group"
-            )
-            label(
-                for="stock"
-                class="form-label"
-            ) So luong san pham
-            input(
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                value= product.stock
-                min="0"
-            )
+
+
         div(
             class="from-group"
             upload-image
             )
             label(  
-                for="thumbnail"
+                for="avatar"
                 class="form-label"
-            ) Hinh anh
+            ) Avatar
             input(
                 type="file"
                 class="form-control-file"
-                id="thumbnail"
-                name="thumbnail"
+                id="avatar"
+                name="avatar"
                 accept="image/*"
                 upload-image-input
             )
             img(
-                src=product.thumbnail   
+                src=data.avatar
                 upload-image-preview
                 width="50px"
             )
+        // role selection inserted immediately after image
         div(
             class="from-group"
             )
             label(
-                for="position"
+                for="role_id"
                 class="form-label"
-            ) Vi tri san pham
-            input(
-                type="number"
-                class="form-control"
-                id="position"
-                name="position"
-                value= product.position
-            )
+            ) Phân quyền
+            select(name="role_id" id="role_id" class="form-control")
+                option(disabled ) -- Chọn --
+                if typeof roles !== 'undefined' && roles.length
+                    each role in roles
+                        option(selected =(role.id==data.role_id? true: false)
+                            value=role.id )= role.title
+ 
         div(
             class="from-group form-check form-check-inline"
             )
@@ -145,8 +112,8 @@ block main
                 class="form-check-input"
                 id="statusActive"
                 name="status"
-                value=product.status
-                checked=(product.status === 'active'? true : false)
+                value="active"
+                checked
             )
             label(
                 for="statusActive"
@@ -162,7 +129,6 @@ block main
                 id="statusInactive"
                 name="status"
                 value="inactive"
-                checked=(product.status === 'inactive'? true : false)
             )
             label(
                 for="statusInactive"
@@ -174,8 +140,7 @@ block main
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Cap nhat 
-
+            ) Tao danh muc san pham
 
 
 
