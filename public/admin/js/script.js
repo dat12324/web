@@ -54,9 +54,7 @@ buttonPagination.forEach(button=>{
 const checkAll = document.querySelector('[checkbox-multi]');
 if(checkAll){
     const inputCheckAll = checkAll.querySelector('input[name="checkall"]');
-    console.log(inputCheckAll);
     const inpuIds = document.querySelectorAll('input[name="id"]');
-    console.log(inpuIds);
     inputCheckAll.addEventListener('change', ()=>{
         const isChecked = inputCheckAll.checked;
         inpuIds.forEach(inputId=>{

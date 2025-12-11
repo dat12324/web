@@ -1,39 +1,43 @@
 extends ../../layout/default.pug
 
 block main
-    .d-flex.justify-content-between.align-items-center.mb-4
-        h1.mb-0 Quản lý vai trò
-        a(href=`${preFixAdmin}/roles/create` class="btn btn-primary") Thêm vai trò
+    if(role.permissions.includes('roles_view')) 
 
-    .card.mb-3
-        .card-header Danh sách vai trò
-        .card-body
-            if roles && roles.length
-                .table-responsive
-                    table.table.table-bordered.table-hover
-                        thead
-                            tr
-                                th #STT
-                                th Tiêu đề
-                                th Quyền
-                                th Mô tả
-                                th.text-center Hành động
-                        tbody
-                            each role, idx in roles
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h1.mb-0 Quản lý vai trò
+            a(href=`${preFixAdmin}/roles/create` class="btn btn-primary") Thêm vai trò
+
+        .card.mb-3
+            .card-header Danh sách vai trò
+            .card-body
+                if roles && roles.length
+                    .table-responsive
+                        table.table.table-bordered.table-hover
+                            thead
                                 tr
-                                    td #{idx + 1}
-                                    td #{role.title}
-                                    td
-                                        if role.permissions && role.permissions.length
-                                            each p in role.permissions
-                                                span.badge.bg-secondary.me-1 #{p}
-                                        else
-                                            span.text-muted Không có quyền
-                                    td.tinymce-content!= role.description
+                                    th #STT
+                                    th Tiêu đề
+                                    th Quyền
+                                    th Mô tả
+                                    th.text-center Hành động
+                            tbody
+                                each role, idx in roles
+                                    tr
+                                        td #{idx + 1}
+                                        td #{role.title}
+                                        td
+                                            if role.permissions && role.permissions.length
+                                                each p in role.permissions
+                                                    span.badge.bg-secondary.me-1 #{p}
+                                            else
+                                                span.text-muted Không có quyền
+                                        td.tinymce-content!= role.description
 
-                                    td.text-center
-                                        a.btn.btn-sm.btn-warning(href=`${preFixAdmin}/roles/edit/${role._id}`) Sửa
-                                        form.d-inline(action=`${preFixAdmin}/roles/delete/${role._id}?_method=DELETE` method="POST")
-                                            button.btn.btn-sm.btn-danger(type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')") Xóa
-            else
-                p.text-muted Chưa có vai trò nào.
+                                        td.text-center
+                                            
+                                            a.btn.btn-sm.btn-warning(href=`${preFixAdmin}/roles/edit/${role._id}`) Sửa
+                                    
+                                            form.d-inline(action=`${preFixAdmin}/roles/delete/${role._id}?_method=DELETE` method="POST")
+                                                button.btn.btn-sm.btn-danger(type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')") Xóa
+                else
+                    p.text-muted Chưa có vai trò nào.

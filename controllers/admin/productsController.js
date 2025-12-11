@@ -5,6 +5,7 @@ const filterStatusHelper = require("../../helpers/filterStatus.js");
 const ObjectSearch = require("../../helpers/search.js");
 const pagination = require("../../helpers/pagnition.js");
 const createTreeHelper = require("../../helpers/createTree.js");
+const Account = require("../../modules/account.model");
 module.exports.index = async (req, res) => {
   // Logic to fetch products from the database
   const filterStatus = filterStatusHelper(req.query);
@@ -37,11 +38,31 @@ module.exports.index = async (req, res) => {
   } else {
     sort.position = "desc";
   }
-  
+
+
+
   const products = await Product.find(find)
     .sort(sort)
     .limit(Pages.limits)
     .skip(Pages.skip);
+  for (const product of products) {
+    const user = await Account.findOne({
+      _id: product.createBy.account_id,
+    });
+    if (user) {
+      product.accountName = user.fullName;
+    }
+    const updatedBy = product.updatedBy.slice(-1)[0]
+    if(updatedBy){
+      const userUpdated = await Account.findOne({
+        _id: updatedBy.account_id
+      })
+      updatedBy.accountName = userUpdated.fullName
+    }
+
+  }
+
+
 
   res.render("admin/pages/product/index", {
     pageTitle: "Products",
@@ -69,12 +90,20 @@ module.exports.changeMulti = async (req, res) => {
   const ids = req.body.ids.split(",");
   console.log(type);
   console.log(ids);
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date(),
+  };
   switch (type) {
     case "inactive":
-      await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+      await Product.updateMany({ _id: { $in: ids } }, { status: "inactive",$push:{
+        updatedBy: updatedBy
+      } });
       break;
     case "active":
-      await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+      await Product.updateMany({ _id: { $in: ids } }, { status: "active" ,$push:{
+        updatedBy: updatedBy
+      }});
       break;
     case "delete-all":
       await Product.updateMany(
@@ -89,7 +118,9 @@ module.exports.changeMulti = async (req, res) => {
       for (const item of ids) {
         let [id, position] = item.split("-");
         position = parseInt(position);
-        await Product.updateOne({ _id: id }, { position: position });
+        await Product.updateOne({ _id: id }, { position: position,$push:{
+        updatedBy: updatedBy
+      } });
       }
   }
 
@@ -99,17 +130,29 @@ module.exports.changeMulti = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   const id = req.params.id;
-  await Product.updateOne({ _id: id }, { deleted: true, deleteAt: Date.now() });
+
+  await Product.updateOne(
+    { _id: id },
+    {
+      deleted: true,
+      deleteBy: {
+        account_id: res.locals.user.id,
+        deletedAt: new Date(),
+      },
+    }
+  );
   res.redirect(req.get("Referer") || "/admin/products");
 };
 
 module.exports.createProduct = async (req, res) => {
-  const records = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
+  const records = await ProductCategory.find({ deleted: false }).sort({
+    position: "desc",
+  });
   const newRecords = createTreeHelper.tree(records);
-  
+
   res.render("admin/pages/product/create", {
     pageTitle: "Create Product",
-    Category : newRecords,
+    Category: newRecords,
   });
 };
 
@@ -123,6 +166,9 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
+  req.body.createBy = {
+    account_id: res.locals.user.id,
+  };
 
   const product = new Product(req.body);
   await product.save();
@@ -134,7 +180,9 @@ module.exports.createPost = async (req, res) => {
 module.exports.editProduct = async (req, res) => {
   const id = req.params.id;
   const find = { _id: id, deleted: false };
-  const records = await ProductCategory.find({ deleted: false }).sort({ position: "desc" });
+  const records = await ProductCategory.find({ deleted: false }).sort({
+    position: "desc",
+  });
 
   const product = await Product.findOne(find);
   const newRecords = createTreeHelper.tree(records);
@@ -142,7 +190,7 @@ module.exports.editProduct = async (req, res) => {
   res.render("admin/pages/product/edit", {
     pageTitle: "Edit Product",
     product: product,
-    Category : newRecords,
+    Category: newRecords,
   });
 };
 module.exports.editPatch = async (req, res) => {
@@ -153,11 +201,19 @@ module.exports.editPatch = async (req, res) => {
   req.body.position = parseInt(req.body.position);
 
   try {
-    await Product.updateOne({ _id: req.params.id }, req.body);
+    const updatedBy = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date(),
+    };
+    await Product.updateOne(
+      { _id: req.params.id },
+      { ...req.body, $push: { updatedBy: updatedBy } }
+    );
     req.flash("success", "Cập nhật sản phẩm thành công");
     res.redirect("/admin/products");
   } catch (error) {
     req.flash("error", "Cập nhật sản phẩm thất bại");
+    console.log(error);
     res.redirect(`/admin/products/edit/${req.params.id}`);
   }
 };

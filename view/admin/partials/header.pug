@@ -5,12 +5,17 @@ header.header
                 .inner-logo
                     a(href="/admin/dashboard") ADMIN
             .col-9
+                div(
+                    class="text-right"
 
-        .col-9
-            div(
-                class="text-right"
+                )
+                    a(href=`${preFixAdmin}/auth/logout` 
+                    class="btn btn-danger btn-sm") Đăng xuất
+            .col-6
+                div(
+                    class="text-right"
 
-            )
-                a(href=`${preFixAdmin}/auth/logout` 
-                class="btn btn-danger btn-sm") Đăng xuất
+                )
+                    a(href=`${preFixAdmin}/infor` 
+                    class="btn btn-danger btn-sm") #{user.fullName}
                     

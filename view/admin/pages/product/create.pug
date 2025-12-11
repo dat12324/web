@@ -3,175 +3,209 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 block main
    +alert-error(3000)
-   h1 Them san pham moi
-   form(
-     action=`${preFixAdmin}/products/create`
-     id="form-create-product"
-     method="POST"
-     enctype="multipart/form-data"
-   )
+   if(role.permissions.includes('products_create')) 
+    h1 Them san pham moi
+    form(
+        action=`${preFixAdmin}/products/create`
+        id="form-create-product"
+        method="POST"
+        enctype="multipart/form-data"
+    )
 
-    div(
-        class="from-group"
-        )
-        label(
-            for="title"
-            class="form-label"
-        ) Tieu de san pham
-        input(
-            type="text"
-            class="form-control"
-            id="title"
-            name="title"
-        
-        )
-    div(
-        class="from-group"
-        )
-        label(
-            for="desc"
-            class="form-label"
-        ) Mo ta san pham
-        textarea(
-            class="form-control"
-            id="desc"
-            name="description"
-            rows="5"
-        )
-    div(
+        div(
             class="from-group"
             )
             label(
-                for="product_category_id"
+                for="title"
                 class="form-label"
-            ) Danh muc cha 
-            
-            select(
+            ) Tieu de san pham
+            input(
+                type="text"
                 class="form-control"
-                id="product_category_id"
-                name="product_category_id"
+                id="title"
+                name="title"
+            
             )
-                option(value="") -- Chon danh muc cha --
-                if(Category)
-                    +select-tree(Category)
-    div(
-        class="from-group"
-        )
-        label(
-            for="price"
-            class="form-label"
-        ) Gia san pham
-        input(
-            type="number"
-            class="form-control"
-            id="price"
-            name="price"
-            value="0"
-        )
-    div(
-        class="from-group"
-        )
-        label(
-            for="discount"
-            class="form-label"
-        ) %Giam gia
-        input(
-            type="number"
-            class="form-control"
-            id="discount"
-            name="discountPercentage"
-            value="0"
-            min="0"
-        )
-    div(
-        class="from-group"
-        )
-        label(
-            for="stock"
-            class="form-label"
-        ) So luong san pham
-        input(
-            type="number"
-            class="form-control"
-            id="stock"
-            name="stock"
-            value="0"
-            min="0"
-        )
-    div(
-        class="from-group"
-        upload-image
-        )
-        label(  
-            for="thumbnail"
-            class="form-label"
-        ) Hinh anh
-        input(
-            type="file"
-            class="form-control-file"
-            id="thumbnail"
-            name="thumbnail"
-            accept="image/*"
-            upload-image-input
-        )
-        img(
-            src=""
-            upload-image-preview
-            width="50px"
-        )
-    div(
-        class="from-group"
-        )
-        label(
-            for="position"
-            class="form-label"
-        ) Vi tri san pham
-        input(
-            type="number"
-            class="form-control"
-            id="position"
-            name="position"
-        )
-    div(
-        class="from-group form-check form-check-inline"
-        )
-        
-        input(
-            type="radio"
-            class="form-check-input"
-            id="statusActive"
-            name="status"
-            value="active"
-            checked
-        )
-        label(
-            for="statusActive"
-            class="form-check-label"
-        ) Hoat dong
-    div(
-        class="from-group form-check form-check-inline"
-        )
-        
-        input(
-            type="radio"
-            class="form-check-input"
-            id="statusInactive"
-            name="status"
-            value="inactive"
-        )
-        label(
-            for="statusInactive"
-            class="form-check-label"
-        ) Dung hoat dong
-    div(
-        class="from-group mt-3"
-        )
-        button(
-            type="submit"
-            class="btn btn-primary"
-        ) Tao san pham
-
-        
+        div(
+            class="from-group"
+            )
+            label(
+                for="desc"
+                class="form-label"
+            ) Mo ta san pham
+            textarea(
+                class="form-control"
+                id="desc"
+                name="description"
+                rows="5"
+            )
+        div(
+                class="from-group"
+                )
+                label(
+                    for="product_category_id"
+                    class="form-label"
+                ) Danh muc cha 
+                
+                select(
+                    class="form-control"
+                    id="product_category_id"
+                    name="product_category_id"
+                )
+                    option(value="") -- Chon danh muc cha --
+                    if(Category)
+                        +select-tree(Category)
+        div(
+            class="from-group form-check form-check-inline"
+            )
+            
+            input(
+                type="radio"
+                class="form-check-input"
+                id="featured1"
+                name="featured"
+                value="1"
+            )
+            label(
+                for="featured1"
+                class="form-check-label"
+            ) Noi bat
+        div(
+            class="from-group form-check form-check-inline"
+            )
+            
+            input(
+                type="radio"
+                class="form-check-input"
+                id="featured0"
+                name="featured"
+                value="0"
+                checked
+            )
+            label(
+                for="featured0"
+                class="form-check-label"
+            ) Khong noi bat
 
 
-   script(src="/admin/js/product.js") 
+        div(
+            class="from-group"
+            )
+            label(
+                for="price"
+                class="form-label"
+            ) Gia san pham
+            input(
+                type="number"
+                class="form-control"
+                id="price"
+                name="price"
+                value="0"
+            )
+        div(
+            class="from-group"
+            )
+            label(
+                for="discount"
+                class="form-label"
+            ) %Giam gia
+            input(
+                type="number"
+                class="form-control"
+                id="discount"
+                name="discountPercentage"
+                value="0"
+                min="0"
+            )
+        div(
+            class="from-group"
+            )
+            label(
+                for="stock"
+                class="form-label"
+            ) So luong san pham
+            input(
+                type="number"
+                class="form-control"
+                id="stock"
+                name="stock"
+                value="0"
+                min="0"
+            )
+        div(
+            class="from-group"
+            upload-image
+            )
+            label(  
+                for="thumbnail"
+                class="form-label"
+            ) Hinh anh
+            input(
+                type="file"
+                class="form-control-file"
+                id="thumbnail"
+                name="thumbnail"
+                accept="image/*"
+                upload-image-input
+            )
+            img(
+                src=""
+                upload-image-preview
+                width="50px"
+            )
+        div(
+            class="from-group"
+            )
+            label(
+                for="position"
+                class="form-label"
+            ) Vi tri san pham
+            input(
+                type="number"
+                class="form-control"
+                id="position"
+                name="position"
+            )
+        div(
+            class="from-group form-check form-check-inline"
+            )
+            
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusActive"
+                name="status"
+                value="active"
+                checked
+            )
+            label(
+                for="statusActive"
+                class="form-check-label"
+            ) Hoat dong
+        div(
+            class="from-group form-check form-check-inline"
+            )
+            
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusInactive"
+                name="status"
+                value="inactive"
+            )
+            label(
+                for="statusInactive"
+                class="form-check-label"
+            ) Dung hoat dong
+        div(
+            class="from-group mt-3"
+            )
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Tao san pham
+
+            
+
+
+    script(src="/admin/js/product.js") 

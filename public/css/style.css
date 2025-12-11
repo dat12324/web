@@ -228,3 +228,152 @@ body {
     min-height: 100vh;
     position: relative;
 }
+
+/* Sub-menu (dropdown) styles for header navigation */
+/* Sub-menu (dropdown) styles for header navigation - generic for any li > ul */
+.menu-list li {
+    position: relative; /* ensure nested ul are positioned relative to their parent li */
+}
+
+/* make sure parent containers don't clip dropdowns */
+.header,
+.inner-menu,
+.menu-list,
+.container {
+    overflow: visible;
+}
+
+.menu-list li > ul {
+    display: none;
+    position: absolute;
+    /* overlap slightly (negative offset) so there's no pointer gap between parent and dropdown */
+    top: calc(100% - 8px);
+    left: 0;
+    background: #ffffff;
+    min-width: 260px;
+    width: auto;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    padding: 8px 0;
+    border-radius: 6px;
+    z-index: 2000;
+}
+
+.menu-list li > ul li {
+    margin: 0;
+}
+
+.menu-list li > ul li a {
+    display: block;
+    padding: 8px 16px;
+    color: #2c3e50;
+    text-transform: none;
+    font-weight: 400;
+    white-space: normal; /* allow long labels to wrap inside menu */
+}
+
+.menu-list li > ul li a:hover {
+    background: #f5f8fb;
+    color: #3498db;
+}
+
+/* Remove header underline effect for submenu anchors */
+.menu-list li > ul li a::after {
+    display: none;
+}
+
+/* Ensure nested ULs have no bullets and reset spacing */
+.menu-list li > ul,
+.menu-list li > ul ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Nested submenu (flyout to the right) */
+.menu-list li > ul li > ul {
+    display: none;
+    position: absolute; /* flyout to the right of its parent li */
+    left: calc(100% - 8px); /* slight overlap to remove pointer gap */
+    top: 0;
+    background: #ffffff;
+    min-width: 220px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    padding: 6px 0;
+    border-radius: 6px;
+}
+
+/* show submenu on hover (desktop) for any li with child ul */
+.menu-list li:hover > ul,
+.menu-list li.open > ul {
+    display: block;
+}
+
+/* ensure the deepest flyouts are visible and aligned */
+.menu-list li > ul li > ul {
+    transform: none;
+    /* if this submenu is absolute, also overlap slightly to avoid gaps */
+    top: 0;
+}
+
+/* Show deeper nested submenus when parent li is hovered */
+.menu-list li > ul li:hover > ul,
+.menu-list li.open > ul li.open > ul,
+.menu-list li > ul li > ul li:hover > ul {
+    display: block;
+}
+
+/* Ensure nested levels appear above other content */
+.menu-list li > ul,
+.menu-list li > ul li > ul {
+    z-index: 2500;
+}
+
+/* Invisible hover buffer to cover the tiny gap between parent link and dropdown
+   so moving the pointer keeps the parent :hover active. Adjust `height` if
+   you still see flicker. */
+.menu-list li {
+    position: relative; /* ensure pseudo element positions correctly */
+}
+.menu-list li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 10px; /* buffer height */
+    pointer-events: auto; /* keep hover when cursor passes over this zone */
+}
+
+/* Add caret only for items that have submenus (modern browsers support :has) */
+.menu-list li.has-children > a::after {
+    content: '\25BC';
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 10px;
+    vertical-align: middle;
+}
+
+/* Mobile adjustments: stack menu and make submenus static */
+@media (max-width: 768px) {
+    .menu-list {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .menu-list li {
+        margin: 8px 0;
+    }
+
+    .menu-list li > ul {
+        position: static;
+        display: none;
+        padding-left: 12px;
+        box-shadow: none;
+    }
+
+    /* simple toggle via focus/active for keyboard/touch fallback */
+    .menu-list li:focus-within > ul,
+    .menu-list li:active > ul {
+        display: block;
+    }
+}

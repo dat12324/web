@@ -2,34 +2,35 @@ extends ../../layout/default.pug
 include ../../mixins/alert.pug
 
 block main
-    h1.mb-0 Tài khoản
-    +alert(3000)
+    if(role.permissions.includes('accounts_view')) 
+        h1.mb-0 Tài khoản
+        +alert(3000)
 
-    div(class="text-right")
-        a.btn.btn-primary.mb-3(href=`${preFixAdmin}/accounts/create`) Thêm tài khoản
+        div(class="text-right")
+            a.btn.btn-primary.mb-3(href=`${preFixAdmin}/accounts/create`) Thêm tài khoản
 
-    if accounts && accounts.length
-        table(class="table table-hover table-striped table-sm")
-            thead
-                tr
-                    th #
-                    th Tên
-                    th Email
-                    th Vai trò
-                    th Trạng thái
-                    th.text-center Hành động
-            tbody
-                each account, i in accounts
+        if accounts && accounts.length
+            table(class="table table-hover table-striped table-sm")
+                thead
                     tr
-                        td #{i + 1}
-                        td= account.name || account.title || '-'
-                        td= account.email || '-'
-                        td= account.role.title
-                        td= account.status =="active" ? 'Kích hoạt' : 'Đã khóa'
-                        td.text-center
-                            a.btn.btn-sm.btn-secondary.mr-1(href=`${preFixAdmin}/accounts/view/${account._id || account.id}`) Chi tiết
-                            a.btn.btn-sm.btn-info(href=`${preFixAdmin}/accounts/edit/${account._id || account.id}`) Sửa
-                            form.d-inline(action=`${preFixAdmin}/accounts/delete/${account._id || account.id}?_method=DELETE` method="POST")
-                                button.btn.btn-sm.btn-danger(type="submit" onclick="return confirm('Xác nhận xóa?')") Xóa
-    else
-        p.text-muted Không có tài khoản nào.
+                        th #
+                        th Tên
+                        th Email
+                        th Vai trò
+                        th Trạng thái
+                        th.text-center Hành động
+                tbody
+                    each account, i in accounts
+                        tr
+                            td #{i + 1}
+                            td= account.fullName || '-'
+                            td= account.email || '-'
+                            td= account.role.title
+                            td= account.status =="active" ? 'Kích hoạt' : 'Đã khóa'
+                            td.text-center
+                                a.btn.btn-sm.btn-secondary.mr-1(href=`${preFixAdmin}/accounts/view/${account._id || account.id}`) Chi tiết
+                                a.btn.btn-sm.btn-info(href=`${preFixAdmin}/accounts/edit/${account._id || account.id}`) Sửa
+                                form.d-inline(action=`${preFixAdmin}/accounts/delete/${account._id || account.id}?_method=DELETE` method="POST")
+                                    button.btn.btn-sm.btn-danger(type="submit" onclick="return confirm('Xác nhận xóa?')") Xóa
+        else
+            p.text-muted Không có tài khoản nào.

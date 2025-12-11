@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const express = require('express');
 const multer = require('multer');
+const moment = require('moment');
+
 const path = require('path');
 const route = require('./routes/client/index.route');
 const adminRoute = require('./routes/admin/index.route');
@@ -34,6 +36,7 @@ app.set("views",`${__dirname}/view`);
 app.set("view engine","pug"); 
 app.use(express.static(`${__dirname}/public`));
 app.locals.preFixAdmin = systemCongig.preFixAdmin;
+app.locals.moment = moment
 
 
 const startServer = async () => {
@@ -45,7 +48,7 @@ const startServer = async () => {
     route(app);
     adminRoute(app);
 
-    app.listen(PORT, () => {
+    app.listen(PORT, () =>  {
       console.log(`🚀 Server is running on port ${PORT}`);
     });
   } catch (error) {

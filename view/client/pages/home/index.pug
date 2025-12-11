@@ -1,3 +1,18 @@
 extends ../../layout/default.pug
+include ../../mixin/box-head.pug
+include ../../mixin/product-layout.pug
 block main
-    h1 Home Page
+    h1 Welcome to the Home Page
+    .container.my-3
+        .row
+            .col-12
+                +box-head('San phẩm nổi bật')
+        .row
+            +product-layout(productsFeatured)
+
+    .container.my-3
+        .row
+            .col-12
+                +box-head('San phẩm mới')
+        .row
+            +product-layout(productNew)

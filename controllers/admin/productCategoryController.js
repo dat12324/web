@@ -30,7 +30,6 @@ module.exports.index = async (req, res) => {
     countProduct
   );
 
-
   const productCategories = await ProductCategory.find(find)
     .sort({ position: "desc" })
     .limit(Pages.limits)
@@ -48,7 +47,6 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-
   // load existing categories so user can pick a parent category
   const productCategories = await ProductCategory.find({ deleted: false }).sort(
     { position: "desc" }
@@ -64,17 +62,22 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  console.log(req.body);
-  if (req.body.position == "") {
-    const countProduct = await ProductCategory.countDocuments({});
-    req.body.position = countProduct + 1;
+  const permission = res.locals.role.permissions;
+  if (permissions.includes("products-category_create")) {
+    if (req.body.position == "") {
+      const countProduct = await ProductCategory.countDocuments({});
+      req.body.position = countProduct + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+    const productCategory = new ProductCategory(req.body);
+    await productCategory.save();
+    req.flash("success", "Tạo danh mục sản phẩm thành công");
+    res.redirect("/admin/product-category");
   } else {
-    req.body.position = parseInt(req.body.position);
+    res.send("403")
+    return;
   }
-  const productCategory = new ProductCategory(req.body);
-  await productCategory.save();
-  req.flash("success", "Tạo danh mục sản phẩm thành công");
-  res.redirect("/admin/product-category");
 };
 
 module.exports.changeStatus = async (req, res) => {
@@ -143,14 +146,14 @@ module.exports.editProduct = async (req, res) => {
     { position: "desc" }
   );
 
-  const records = createTreeHelper.tree(productCategories)
+  const records = createTreeHelper.tree(productCategories);
 
   const product = await ProductCategory.findOne(find);
   res.render("admin/pages/product-category/edit", {
     pageTitle: "Edit Product",
     product: product,
     productCategory: productCategories,
-    records: records
+    records: records,
   });
 };
 
@@ -179,4 +182,3 @@ module.exports.detail = async (req, res) => {
     product: product,
   });
 };
-

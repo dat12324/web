@@ -1,0 +1,32 @@
+extends ../../layout/default.pug
+include ../../mixins/alert.pug
+
+block main
+	+alert-error(3000)
+
+	h1.mb-4 Chỉnh sửa thông tin cá nhân
+	form(action=`${preFixAdmin}/infor/edit?_method=PATCH` method="POST" enctype="multipart/form-data")
+		.mb-3
+			label.form-label(for="fullName") Họ tên
+			input.form-control(type="text" id="fullName" name="fullName" value=(user ? user.fullName : ''))
+
+		.mb-3
+			label.form-label(for="email") Email
+			input.form-control(type="email" id="email" name="email" value=(user ? user.email : '') )
+
+		.mb-3
+			label.form-label(for="password") Mật khẩu (để trống nếu không đổi)
+			input.form-control(type="password" id="password" name="password")
+
+		.mb-3
+			label.form-label(for="phone") Số điện thoại
+			input.form-control(type="text" id="phone" name="phone" value=(user ? user.phone : ''))
+
+		.mb-3
+			label.form-label(for="avatar") Avatar
+			input.form-control(type="file" id="avatar" name="avatar" accept="image/*")
+			if user && user.avatar
+				img(src=user.avatar width="80" class="mt-2")
+
+		button.btn.btn-primary(type="submit") Lưu thay đổi
+

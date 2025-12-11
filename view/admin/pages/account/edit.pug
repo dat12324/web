@@ -3,145 +3,147 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 block main
     +alert-error(3000)
-    h1 Sua tai khoan
-    form(
-        action=`${preFixAdmin}/accounts/edit/${data.id}?_method=PATCH`
-        method="POST"
-        enctype="multipart/form-data"
-    )
-        div(
-            class="from-group"
-            )
-            label(
-                for="fullName"
-                class="form-label"
-            ) Ho ten
-            input(
-                type="text"
-                class="form-control"
-                id="fullName"
-                name="fullName"
-                value = data.fullName
-            )
-        div(
-            class="from-group"
-            )
-            label(
-                for="email"
-                class="form-label"
-            ) email
-            input(
-                type="text"
-                class="form-control"
-                id="email"
-                name="email"
-                value = data.email
-            )
-        div(
-            class="from-group"
-            )
-            label(
-                for="password"
-                class="form-label"
-            ) password
-            input(
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-            )
-        div(
-            class="from-group"
-            )
-            label(
-                for="phone"
-                class="form-label"
-            ) phone
-            input(
-                type="text"
-                class="form-control"
-                id="phone"
-                name="phone"
-                value = data.phone
-            )
+    if(role.permissions.includes('accounts_edit')) 
+
+        h1 Sua tai khoan
+        form(
+            action=`${preFixAdmin}/accounts/edit/${data.id}?_method=PATCH`
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div(
+                class="from-group"
+                )
+                label(
+                    for="fullName"
+                    class="form-label"
+                ) Ho ten
+                input(
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    name="fullName"
+                    value = data.fullName
+                )
+            div(
+                class="from-group"
+                )
+                label(
+                    for="email"
+                    class="form-label"
+                ) email
+                input(
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    value = data.email
+                )
+            div(
+                class="from-group"
+                )
+                label(
+                    for="password"
+                    class="form-label"
+                ) password
+                input(
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                )
+            div(
+                class="from-group"
+                )
+                label(
+                    for="phone"
+                    class="form-label"
+                ) phone
+                input(
+                    type="text"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                    value = data.phone
+                )
 
 
 
-        div(
-            class="from-group"
-            upload-image
-            )
-            label(  
-                for="avatar"
-                class="form-label"
-            ) Avatar
-            input(
-                type="file"
-                class="form-control-file"
-                id="avatar"
-                name="avatar"
-                accept="image/*"
-                upload-image-input
-            )
-            img(
-                src=data.avatar
-                upload-image-preview
-                width="50px"
-            )
-        // role selection inserted immediately after image
-        div(
-            class="from-group"
-            )
-            label(
-                for="role_id"
-                class="form-label"
-            ) Phân quyền
-            select(name="role_id" id="role_id" class="form-control")
-                option(disabled ) -- Chọn --
-                if typeof roles !== 'undefined' && roles.length
-                    each role in roles
-                        option(selected =(role.id==data.role_id? true: false)
-                            value=role.id )= role.title
- 
-        div(
-            class="from-group form-check form-check-inline"
-            )
+            div(
+                class="from-group"
+                upload-image
+                )
+                label(  
+                    for="avatar"
+                    class="form-label"
+                ) Avatar
+                input(
+                    type="file"
+                    class="form-control-file"
+                    id="avatar"
+                    name="avatar"
+                    accept="image/*"
+                    upload-image-input
+                )
+                img(
+                    src=data.avatar
+                    upload-image-preview
+                    width="50px"
+                )
+            // role selection inserted immediately after image
+            div(
+                class="from-group"
+                )
+                label(
+                    for="role_id"
+                    class="form-label"
+                ) Phân quyền
+                select(name="role_id" id="role_id" class="form-control")
+                    option(disabled ) -- Chọn --
+                    if typeof roles !== 'undefined' && roles.length
+                        each role in roles
+                            option(selected =(role.id==data.role_id? true: false)
+                                value=role.id )= role.title
+    
+            div(
+                class="from-group form-check form-check-inline"
+                )
 
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusActive"
-                name="status"
-                value="active"
-                checked
-            )
-            label(
-                for="statusActive"
-                class="form-check-label"
-            ) Hoat dong
-        div(
-            class="from-group form-check form-check-inline"
-            )
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="active"
+                    checked
+                )
+                label(
+                    for="statusActive"
+                    class="form-check-label"
+                ) Hoat dong
+            div(
+                class="from-group form-check form-check-inline"
+                )
 
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusInactive"
-                name="status"
-                value="inactive"
-            )
-            label(
-                for="statusInactive"
-                class="form-check-label"
-            ) Dung hoat dong
-        div(
-            class="from-group mt-3"
-            )
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Tao danh muc san pham
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusInactive"
+                    name="status"
+                    value="inactive"
+                )
+                label(
+                    for="statusInactive"
+                    class="form-check-label"
+                ) Dung hoat dong
+            div(
+                class="from-group mt-3"
+                )
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Tao danh muc san pham
 
 
 
-    script(src="/admin/js/product.js") 
+        script(src="/admin/js/product.js") 

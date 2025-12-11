@@ -1,3 +1,4 @@
+include ../mixin/sub-menu.pug
 header.header
     .container
         .row.align-items-center
@@ -10,6 +11,13 @@ header.header
                     ul.menu-list
                         li
                             a(href="/") Home
-                        li
-                            a(href="/products") Products
+                        li(class="sub-menu")
+                            - const pathProduct = "/products"
+                            a(href=pathProduct) Products
+                            +sub-menu(newCategory, pathProduct)
+                                // Example of generated structure:
+
                     
+                    // include menu toggle script to support touch and better hover
+                    script(src="/js/menu-toggle.js")
+

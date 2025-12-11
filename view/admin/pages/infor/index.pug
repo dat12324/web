@@ -1,0 +1,39 @@
+extends ../../layout/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/moment.pug
+
+block main
+	+alert(3000)
+
+	h1.mb-4 Thông tin cá nhân
+	.card
+		.card-body
+			.row
+				.col-md-4
+					if user && user.avatar
+						img(src=user.avatar, class="img-fluid rounded")
+					else
+						img(src="/images/no-image.jpg", class="img-fluid rounded")
+				.col-md-8
+					dl.row
+						dt.col-sm-3 Họ tên
+						dd.col-sm-9= user ? user.fullName : ''
+
+						dt.col-sm-3 Email
+						dd.col-sm-9= user ? user.email : ''
+
+						dt.col-sm-3 Vai trò
+						dd.col-sm-9= user && user.roleName ? user.roleName : '—'
+
+						dt.col-sm-3 Ngày tạo
+						dd.col-sm-9
+							if user && user.createdAt
+								+format-date(user.createdAt)
+							else
+								| -
+						dt.col-sm-3 Phone 
+						dd.col-sm-9= user && user.phone ? user.phone : '—'
+						
+
+					a.btn.btn-primary.mt-3(href=`${preFixAdmin}/infor/edit`) Chỉnh sửa thông tin
+
