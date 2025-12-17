@@ -6,7 +6,6 @@ module.exports.index = async (req, res) => {
         status: 'active',
         featured:"1" })
     const newProduct = productHelper.productNewPrice(productsFeatured);
-    console.log(newProduct);
 
     const productNew = await Product.find({ 
         deleted: false, 

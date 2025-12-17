@@ -4,18 +4,15 @@ header.header
             .col-3
                 .inner-logo
                     a(href="/admin/dashboard") ADMIN
-            .col-9
-                div(
-                    class="text-right"
-
-                )
-                    a(href=`${preFixAdmin}/auth/logout` 
-                    class="btn btn-danger btn-sm") Đăng xuất
-            .col-6
-                div(
-                    class="text-right"
-
-                )
-                    a(href=`${preFixAdmin}/infor` 
-                    class="btn btn-danger btn-sm") #{user.fullName}
+            .col-9.d-flex.justify-content-end.align-items-center
+                // compact user link (goes to infor). logout moved into infor page
+                if user
+                    a.d-flex.align-items-center(href=`${preFixAdmin}/infor` title="Xem thông tin")
+                        if user.avatar
+                            img(src=user.avatar alt="avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;margin-right:10px")
+                        else
+                            span(style="width:36px;height:36px;border-radius:50%;display:inline-block;background:linear-gradient(45deg,#ffd8c2,#ff6b00);margin-right:10px")
+                        span.text-dark #{user.fullName}
+                else
+                    a.btn.btn-outline(href=`${preFixAdmin}/auth/login`) Đăng nhập
                     

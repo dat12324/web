@@ -1,99 +1,96 @@
 extends ../../layout/default.pug
-
-
+include ../../mixin/alert.pug
 block main
-    
-    .d-flex.justify-content-between.align-items-center.mb-4
-        h1.mb-0 Chi tiết sản phẩm
-        a(href=`${preFixAdmin}/products` class="btn btn-secondary") 
-            i.bi.bi-arrow-left 
-            | Quay lại
-    
-    .row
-        .col-md-8
-            .card.mb-4
-                .card-header.bg-light
-                    h5.mb-0 Thông tin sản phẩm
-                .card-body
-                    .row.mb-3
-                        .col-sm-4
-                            strong Tiêu đề:
-                        .col-sm-8
-                            p.mb-0= product.title
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong Mô tả:
-                        .col-sm-8
-                            p.mb-0.tinymce-content!= product.description
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong Giá sản phẩm:
-                        .col-sm-8
-                            p.mb-0
-                                span.badge.bg-success= product.price + '$'
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong % Giảm giá:
-                        .col-sm-8
-                            p.mb-0= product.discountPercentage + '%'
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong Số lượng:
-                        .col-sm-8
-                            p.mb-0= product.stock
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong Vị trí:
-                        .col-sm-8
-                            p.mb-0= product.position
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong Trạng thái:
-                        .col-sm-8
-                            p.mb-0
-                                if product.status === 'active'
-                                    span.badge.bg-success Hoạt động
-                                else
-                                    span.badge.bg-secondary Dừng hoạt động
-                    
-                    .row.mb-3
-                        .col-sm-4
-                            strong Hình ảnh:
-                        .col-sm-8
-                            if product.thumbnail
-                                img(
-                                    src=product.thumbnail
-                                    alt=product.title
-                                    class="img-thumbnail"
-                                    style="max-width: 200px; height: auto;"
-                                )
-                            else
-                                div.bg-light.p-3.text-center.border
-                                    small.text-muted Không có hình ảnh
-            
-        
-        
-        .col-md-4
-            .card.bg-light
-                .card-header.bg-white
-                    h5.mb-0 Thông tin khác
-                .card-body.small
-                    .mb-2
-                        strong ID:
-                        br
-                        code= product._id
-                    .mb-2
-                        strong Ngày tạo:
-                        br
-                        span= product.createdAt ? new Date(product.createdAt).toLocaleString('vi-VN') : 'N/A'
-                    if product.updatedAt
-                        .mb-2
-                            strong Cập nhật lần cuối:
-                            br
-                            span= new Date(product.updatedAt).toLocaleString('vi-VN')
+    - const discount = product.discountPercentage || 0
+    - const price = Number(product.price) || 0
+    - const priceNew = Math.round((price * (100 - discount)) / 100)
+    +alert(3000)
+    .breadcrumb.mb-3
+        a(href="/") Trang chủ
+        |  / 
+        a(href="/products") Sản phẩm
+        if product && product.title
+            |  / 
+            span.text-muted= product.title
+
+    .product-detail.container.my-4
+        .row.g-4
+            .col-lg-7
+                .product-gallery
+                    - const images = Array.isArray(product.images) && product.images.length ? product.images : (product.thumbnail ? [product.thumbnail] : [])
+                    if images.length
+                        .main-image.mb-3
+                            img#mainProductImage(src=images[0] alt=product.title)
+                        .thumbs.d-flex.flex-row.g-2
+                            each imgSrc, idx in images
+                                img.thumb(src=imgSrc alt=`thumb-${idx}` data-src=imgSrc)
+                    else
+                        .no-image.bg-light.d-flex.align-items-center.justify-content-center(style="height:420px")
+                            span.text-muted Không có hình ảnh
+                // product meta under gallery (small)
+                .mt-3.small.text-muted
+                    if product.sku
+                        span.me-3 SKU: #{product.sku}
+                    if product.brand
+                        span.me-3 Thương hiệu: #{product.brand}
+            .col-lg-5
+                h1.product-title= product.title
+                if product.product_category_id
+                    p.mb-1
+                        small.text-muted Danh mục: 
+                        a(href=`/products/category/${product.product_category_id}`)= product.category.title 
+
+                .price.mb-3
+                    .price-column
+                        span.new #{new Intl.NumberFormat('en-US').format(priceNew)}$
+                        if discount
+                            span.old #{new Intl.NumberFormat('en-US').format(price)}$
+                            span.discount.badge.bg-success.mt-2 Giảm #{discount}%
+
+                .stock.mb-3
+                    strong Còn lại: 
+                    span= product.stock || 0
+
+                form(
+                    action=`/cart/add/${product.id}` 
+                    method="POST"
+                )
+                    input(
+                        type="number"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        max=product.stock 
+                        class="form-control mb-2"   
+                        )
+                    button(
+                        type="submit"
+                        class="btn btn-success btn-block"
+                        ) Thêm vào giỏ hàng
+
+               
+
+        .row.mt-4
+            .col-12
+                // tabs: Mô tả | Thông số
+                ul.nav.nav-tabs(role='tablist')
+                    li.nav-item
+                        a.nav-link.active(href='#desc' data-bs-toggle='tab') Mô tả
+                    li.nav-item
+                        a.nav-link(href='#specs' data-bs-toggle='tab') Thông số
+                .tab-content.p-3.border.border-top-0
+                    .tab-pane.fade.show.active#desc
+                        .tinymce-content!= product.description
+                    .tab-pane.fade#specs
+                        if product.specs
+                            table.table.table-sm
+                                tbody
+                                    each val, key in product.specs
+                                        tr
+                                            th(style='width:200px')= key
+                                            td= val
+                        else
+                            p.text-muted Chưa có thông số
+
+    // include gallery script
+    script(src='/js/product-gallery.js')

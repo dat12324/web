@@ -1,0 +1,15 @@
+mixin alert(time)
+    - if (messages.success && messages.success.length > 0)
+        div(data-time=time
+            class="alert alert-success"
+            show-alert
+            )
+            = messages.success[0]
+
+mixin alert-error(time)
+    - if (messages.error && messages.error.length > 0)
+        div(data-time=time
+            class="alert alert-danger"
+            show-alert
+            )
+            = messages.error[0]

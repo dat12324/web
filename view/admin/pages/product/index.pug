@@ -92,10 +92,12 @@ block main
                             td #{product.accountName}
                             +format-date(product.createBy.createdAt)
                             td
-                                - const updatedBy = product.updatedBy.slice(-1)[0]
+                                - const updatedBy = product.updatedBy && product.updatedBy.length ? product.updatedBy.slice(-1)[0] : null
                                 if (updatedBy)
-                                    p.mb-0 #{updatedBy.accountName}
-                                    +format-date(updatedBy.updatedAt)
+                                    p.mb-0.fw-bold #{updatedBy.accountName}
+                                 
+                                else
+                                    span.text-muted —
                             td.text-center
                                 if(role.permissions.includes('products_edit'))
 

@@ -1,0 +1,13 @@
+extends ../../layout/default.pug
+include ../../mixin/box-head.pug
+include ../../mixin/product-layout.pug
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head('Giỏ hàng của bạn')
+        .row
+            if cart && cart.products.length > 0
+                +product-layout(cart.products)
+            else
+                p Giỏ hàng của bạn đang trống.
