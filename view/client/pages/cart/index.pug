@@ -1,13 +1,46 @@
 extends ../../layout/default.pug
 include ../../mixin/box-head.pug
 include ../../mixin/product-layout.pug
+include ../../mixin/alert.pug
 block main
+    +alert(3000)
     .container.my-3
         .row
             .col-12
                 +box-head('Giỏ hàng của bạn')
         .row
-            if cart && cart.products.length > 0
-                +product-layout(cart.products)
-            else
-                p Giỏ hàng của bạn đang trống.
+            table(class="table table-bordered ")
+                thead
+                    tr
+                        th.text-center STT
+                        th Sản phẩm
+                        th Anh
+                        th.text-center Giá
+                        th.text-center Số lượng
+                        th.text-center Tổng tiền
+                        th.text-center Hành động
+                tbody
+                    if(cartItems.products.length > 0)
+                        each item, index in cartItems.products
+                            tr
+                                td.text-center #{index + 1}
+                                td
+                                    a(href=`/products/detail/${item.productInfo.slug}`) #{item.productInfo.title}
+                                td 
+                                    img(src=item.productInfo.thumbnail alt="Product Image" width="100")
+                                td.text-center #{new Intl.NumberFormat('en-US').format(item.productInfo.priceNew)}$
+                                td 
+                                    input(type="number" 
+                                    name="quantity"
+                                    value=item.quantity min="1" class="form-control text-center" style="width:80px; margin:auto;"
+                                    item_id=item.product_id)
+                                td.text-center #{new Intl.NumberFormat('en-US').format(item.productInfo.priceNew * item.quantity)}$
+                                td.text-center 
+                                    a(href=`/cart/delete/${item.product_id}` class="btn btn-danger btn-sm") Xóa
+
+        h3(class="text-right") Tổng cộng: #{new Intl.NumberFormat('en-US').format(cartItems.products.reduce((total, item) => total + (item.productInfo.priceNew * item.quantity), 0))}$
+
+        div(class="text-right mt-3")
+            a(href="/checkout" class="btn btn-success") Tiến hành thanh toán
+
+    script(src="/js/cart.js")
