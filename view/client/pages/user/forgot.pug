@@ -1,0 +1,15 @@
+extends ../../layout/default.pug
+include ../../mixin/alert.pug
+
+block main
+    .register-container
+        h2 Quên mật khẩu
+        +alert(3000)
+        +alert-error(3000)
+
+        form.register-form(action="/user/password/forgot" method="POST")
+            .form-group
+                label(for="email") Nhập email của bạn
+                input#email(type="email" 
+                name="email" placeholder="example@gmail.com")
+            button.btn-submit(type="submit") Gửi yêu cầu

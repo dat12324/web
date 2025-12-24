@@ -25,6 +25,16 @@ header.header
                         li
                             a(href="/cart") Gio hang (#{cartTotalQuantity})
 
+                        
+                        li
+                            if user
+                                a(href="/user/infor") Xin chào #{user.fullName}
+                                a(href="/user/logout") Đăng xuất
+                            else
+                                a(href="/user/login") Dang Nhap
+                         
+        
+
                     
                     // include menu toggle script to support touch and better hover
                     script(src="/js/menu-toggle.js")

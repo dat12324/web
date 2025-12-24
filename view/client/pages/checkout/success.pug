@@ -1,0 +1,44 @@
+extends ../../layout/default.pug
+include ../../mixin/box-head.pug
+include ../../mixin/product-layout.pug
+include ../../mixin/alert.pug
+block main
+    +alert(3000)
+    .container.my-3
+        .row
+            .col-12
+                +box-head(pageTitle)  
+        .row
+            table(class="table table-bordered ")
+                thead
+                    tr
+                        th.text-center STT
+                        th Sản phẩm
+                        th Anh
+                        th.text-center Giá
+                        th.text-center Số lượng
+                        th.text-center Tổng tiền
+                tbody
+                    if(orderItems.products.length > 0)
+                        each item, index in orderItems.products
+                            tr
+                                td.text-center #{index + 1}
+                                td
+                                    p  #{item.productInfo.title}
+                                td 
+                                    img(src=item.productInfo.thumbnail alt="Product Image" width="100")
+                                td.text-center #{item.priceNew}$
+                                td.text-center #{item.quantity}
+                                td.text-center #{item.totalPrice}$
+        h3(class="text-right") Tổng cộng: #{new Intl.NumberFormat('en-US').format(orderItems.products.reduce((total, item) => total + (item.priceNew * item.quantity), 0))}$
+
+        .row 
+            .col-12
+                .card
+                    .card-body
+                        h5 Thông tin giao hàng:
+                        p Họ và tên: #{orderItems.userInfo.fullName}
+                        p Địa chỉ: #{orderItems.userInfo.address}
+                        p Số điện thoại: #{orderItems.userInfo.phone}
+                        .text-center.mt-4
+                            a.btn.btn-primary(href="/") Quay về trang chủ

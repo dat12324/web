@@ -1,0 +1,49 @@
+extends ../../layout/default.pug
+include ../../mixin/box-head.pug
+include ../../mixin/alert.pug
+block main
+    +alert(3000)
+    .container.my-3
+        .row
+            .col-12
+                +box-head('Đơn hàng của bạn')
+        .row
+            table(class="table table-bordered ")
+                thead
+                    tr
+                        th.text-center STT
+                        th Sản phẩm
+                        th Anh
+                        th.text-center Giá
+                        th.text-center Số lượng
+                        th.text-center Tổng tiền
+                tbody
+                    if(cartItems.products.length > 0)
+                        each item, index in cartItems.products
+                            tr
+                                td.text-center #{index + 1}
+                                td
+                                    a(href=`/products/detail/${item.productInfo.slug}`) #{item.productInfo.title}
+                                td 
+                                    img(src=item.productInfo.thumbnail alt="Product Image" width="100")
+                                td.text-center #{new Intl.NumberFormat('en-US').format(item.productInfo.priceNew)}$
+                                td.text-center #{item.quantity}
+                                td.text-center #{new Intl.NumberFormat('en-US').format(item.productInfo.priceNew * item.quantity)}$
+        h3(class="text-right") Tổng cộng: #{new Intl.NumberFormat('en-US').format(cartItems.products.reduce((total, item) => total + (item.productInfo.priceNew * item.quantity), 0))}$
+
+        if(cartItems.products.length > 0)
+            .row.mt-4
+                .card.p-4.my-4
+                    h4 Thông tin giao hàng
+                    form(action="/checkout/order" method="POST")
+                        .mb-3
+                            label.form-label(for="name") Họ và tên
+                            input.form-control(type="text" id="fullName" name="fullName" required)
+                        .mb-3
+                            label.form-label(for="address") Địa chỉ
+                            input.form-control(type="text" id="address" name="address" required)
+                        .mb-3
+                            label.form-label(for="phone") Số điện thoại
+                            input.form-control(type="text" id="phone" name="phone" required)
+                        button.btn.btn-primary(type="submit") Đặt hàng
+        

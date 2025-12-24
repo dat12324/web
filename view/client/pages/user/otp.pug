@@ -1,0 +1,24 @@
+extends ../../layout/default.pug
+include ../../mixin/alert.pug
+
+block main
+    .register-container
+        h2 Nhập mã OTP
+        +alert(3000)
+        +alert-error(3000)
+
+        form.register-form(action="/user/password/otp" method="POST")
+            .form-group
+                label(for="email") Email
+                input#email(type="email" 
+                name="email" 
+                value=email
+                readonly)
+                label(for="otp") OTP
+                input#otp(type="text"
+                class="form-control"
+                name="otp"
+                placeholder="Nhập mã OTP"
+                required)
+
+            button.btn-submit(type="submit") Gửi yêu cầu

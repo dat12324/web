@@ -1,0 +1,26 @@
+extends ../../layout/default.pug
+include ../../mixin/alert.pug
+
+block main
+  .register-container
+    h2 Đăng nhập tài khoản
+    +alert-error(3000)
+    +alert(3000)
+    
+
+    form.register-form(action="/user/login" method="POST")
+      .form-group
+        label(for="email") Email
+        input#email(type="email" name="email" placeholder="example@gmail.com" required)
+
+      .form-group
+        label(for="password") Mật khẩu
+        input#password(type="password" name="password" placeholder="Nhập mật khẩu" required)
+
+      button.btn-submit(type="submit") Đăng nhập
+
+    a(href="/user/register") Chưa có tài khoản? Đăng ký ngay!
+    br
+    a(href="/user/password/forgot") Quên mật khẩu?
+
+  
