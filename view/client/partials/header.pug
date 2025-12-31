@@ -5,7 +5,7 @@ header.header
             .col-3
                 .inner-logo 
                     a(href="/")
-                        img(src="/images/anh.png", alt="Logo")
+                        img(src=settingGeneral.logo, alt=settingGeneral.websiteName)
 
             .col-search
                 form(action="/search" method="GET" class="search-form")
@@ -32,10 +32,6 @@ header.header
                                 a(href="/user/logout") Đăng xuất
                             else
                                 a(href="/user/login") Dang Nhap
-                         
-        
-
                     
-                    // include menu toggle script to support touch and better hover
                     script(src="/js/menu-toggle.js")
 

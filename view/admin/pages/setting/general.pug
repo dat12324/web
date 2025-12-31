@@ -1,0 +1,63 @@
+extends ../../layout/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    h1.mb-4 Cài đặt chung
+    +alert(3000)
+    +alert-error(3000)
+
+    form(
+        action=`${preFixAdmin}/settings/general?_method=PATCH`
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class="form-group")
+            label(for="website_name") Tên website
+            input#websiteName.form-control(
+                type="text"
+                name="websiteName"
+                value=(settingGeneral? settingGeneral.websiteName : "")
+            )
+        div(class="form-group")
+            label(for="website_logo") Logo website
+            input#logo.form-control(
+                type="file"
+                name="logo"
+                accept="image/*"
+                upload-image-input
+            )
+            img(
+                src=(settingGeneral? settingGeneral.logo : "")
+                class="img-preview mt-2"
+                upload-image-preview
+            )
+        div(class="form-group")
+            label(for="contact_email") Email liên hệ
+            input#email.form-control(
+                type="email"
+                name="email"
+                value=(settingGeneral? settingGeneral.email : "")
+            )
+        div(class="form-group")    
+            label(for="contact_phone") Số điện thoại liên hệ
+            input#phone.form-control(
+                type="text"
+                name="phone"
+                value=(settingGeneral? settingGeneral.phone : "")
+            )
+        div(class="form-group")
+            label(for="contact_address") Địa chỉ liên hệ
+            input#address.form-control(
+                type="text"
+                name="address"
+                value=(settingGeneral? settingGeneral.address : "")
+            )
+        div(class="form-group")
+            label(for="copyright_text") Bản quyền
+            input#copyright.form-control(
+                type="text"
+                name="copyright"
+                value=(settingGeneral? settingGeneral.copyright : "")
+            )
+        div(class="text-right")
+            button(class="btn btn-primary mt-3" type="submit") Lưu thay đổi

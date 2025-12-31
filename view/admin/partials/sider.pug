@@ -11,9 +11,12 @@
 			if(role.permissions.includes('roles_view'))
 				li
 					a(href=`${preFixAdmin}/roles`) Vai trò và quyền
+				li 
+					a(href=`${preFixAdmin}/settings/general`) Cài đặt chung
 			if(role.permissions.includes('accounts_view'))
 				li
 					a(href=`${preFixAdmin}/accounts`) Tài khoản người dùng
 			if(role.permissions.includes('permissions_view'))
 				li
 					a(href=`${preFixAdmin}/roles/permission`) Phan quyền
+			

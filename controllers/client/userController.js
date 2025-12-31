@@ -2,6 +2,7 @@ const User = require("../../modules/user.model.js");
 const md5 = require("md5");
 const ForgotPassword = require("../../modules/forgot-password.model.js");
 const generate = require("../../helpers/random.js");
+const Cart = require("../../modules/cart.model.js");
 const sendEmailHelper = require("../../helpers/sendEmail.js");
 module.exports.register = (req, res) => {
   res.render("client/pages/user/register", {
@@ -40,13 +41,20 @@ module.exports.loginPost = async (req, res) => {
     res.redirect("/user/login");
     return;
   }
+  const cart = await Cart.findOne({ user_id: user.id });
+  res.cookie("cartId", cart.id, { maxAge: 30 * 24 * 60 * 60 * 1000 });
   res.cookie("tokenUser", user.tokenUser, { maxAge: 30 * 24 * 60 * 60 * 1000 });
+  await Cart.updateOne(
+    { _id: req.cookies.cartId },
+    { user_id: user._id }
+  );
   req.flash("success", "Đăng nhập tài khoản thành công");
   res.redirect("/");
 };
 
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
+  res.clearCookie("cartId");
   req.flash("success", "Đăng xuất tài khoản thành công");
   res.redirect("/");
 };

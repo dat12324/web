@@ -6,6 +6,7 @@ const roleRoute = require('./role.route');
 const accountRoute = require('./account.route');
 const inforRoute = require('./infor.route');
 const authRoute = require('./auth.route');
+const settingRoute = require('./setting.route');
 const authMiddleware = require('../../middlewares/admin/auth.middleware');
 module.exports = (app) => {
   const preFixAdmin = systemCongig.preFixAdmin;
@@ -22,5 +23,7 @@ module.exports = (app) => {
   app.use(preFixAdmin+'/infor',authMiddleware.requireAuth ,
     inforRoute);
   app.use(preFixAdmin+'/auth',authRoute);
+  app.use(preFixAdmin+'/settings',authMiddleware.requireAuth ,
+    settingRoute);
 
 };
